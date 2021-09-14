@@ -7,12 +7,118 @@ categories:
 
  > 이 글은 포스텍 이근배 교수님의 CSED342 인공지능 수업의 강의 내용과 자료를 기반으로 하고 있습니다.
 
- 1주차와 2주차 초반에는 인공지능 분야의 기술들에 대한 소개가 주를 이루었다. 이 부분은 가볍게 듣고 넘어가는 부분이고, 본 수업은 이제부터 시작한다.
+ > 참고자료인 인공지능 현대적 접근방식의 Chap2 ~ Chap3 부분을 참고하고 있습니다.
 
- Search는 
+  1주차와 2주차 초반에는 인공지능 분야의 기술들에 대한 소개가 주를 이루었다. 이 부분은 가볍게 듣고 넘어가는 부분이고, 본 수업은 Search부분에서 시작된다.
 
-# 제목1
-## 제목 2
+ ## **Agent**의 개념
+  우리가 참고저서로 활용하는 인공지능 현대적 접근방식은 Rational Agent(합리적 에이전트)를 중심으로 이야기가 진행된다. 따라서, 우린 Agent에 대해 이해를 하고 넘어갈 필요가 있다.
+  
+   Agent는 sensor들을 통해 자신의 환경을 지각하고, actuator들을 통해 환경에 대해 어떠한 action을 수행하는 것을 칭한다. 예를 들어 사람(눈, 귀 등)과 로봇(카메라, 적외선 거리 측정기 등)이 agent에 속한다고 볼 수 있다.
 
-**마크다운** 형식으로 작성된 문서입니다.
-* 파일 이름은 read.md입니다.
+   Rational Agent는 이런 agent 중에서 자신의 performance를 극대화할 만한 action들을 선택할 수 있는 존재이다. 우린 Agent를 잘~ 설계해서 이런 Rational한 모습을 이루고자 하는 거라고 보면 된다.
+
+ ## Agent의 종류
+  Agent는 그 구조와 프로그램이 다양해 일반적으로 4종류의 Agent가 있는데, 수업에선 그 중 2 가지 Agent에 대해 다루고 있다.   
+
+ ### **Reflex Agent** (반사 에이전트)
+ 가장 단순한 형태의 Agent로, Reflex(반사)는 Intelligence의 분류 중에서도 가장 low한 level에 속한다. 
+ 
+ 이들은 항상 *current perception*에만 근거해서 action들을 선택하고, 과거 action들의 history를 고려하지 않으며 미래에 일어날 결과들도 무시한다.
+
+ (사진 첨부)   
+ ex) 사과라는 자극이 로봇의 눈에 지각된 순간, 바로 사과를 딴다는 행동을 저지르는 걸 보여주고 있다. 아주 단순한 로봇.
+
+ 이들은 자신이 인지하는 environment에 기반해 action을 결정하지만 결과를 고려하지 않기 때문에 문제가 될 수 있다. 하지만, 여전히 reflex agent도 rational agent에 속하는 경우가 존재한다. 예를 들어, Life & Death problem 등에서 Reflex function이 그 단순한 특징 때문에 빠른 속도, 높은 performance로 rational하다고 여겨진다.
+
+ ### **Planning Agent** (계획 수립 에이전트)
+  *Planning Agent*는 Reflex Agent보다 더 high level의 intelligence를 가지고 있는 Agent이다. Planning Agent는 본래 Goal-Based Agent가 발전한 형태로, 어떤 *goal*을 가지고 이를 도달하고자 하는 목표를 가지고 *action*을 판단한다.
+
+  지금 Agent가 바라보고 있는 세상이 특정 action에 따라 *current state*에 비해 어떻게 *state가 변하는지*를 추적하고, 결과적으로 세상이 *evolve*되어 *goal*에 더 가까워질 수 있도록 action을 선택한다는 특징이 있다. 
+  
+  (사진 첨부)
+  ex) 앞의 예에서 처럼 똑같이 사과라는 자극이 지각되어도, 자신의 행동에 따라 그냥 뛰어드는 것보다 도구를 이용하는 것이 사과를 딴다는 목표를 더 달성할 수 있다 판단한 것.
+
+  따라서 planning agent는 action을 real world를 모델링하여 simulation을 하므로 memory가 요구되며, 목표에 도달하였는지 확인할 *goal test*도 요구된다.
+
+  planning과 관련해서 *complete planning*과 *optimal planning*이라는 개념이 존재한다. complete planning은 *solution*을 찾아내는 과정이고, optimal planning은 *best solution*을 찾아내는 과정이다.
+
+  또한, real world에서는 goal을 보고 plan을 세워도 그 과정에서 환경의 변화에 의해 goal이 달라지는 경우가 있어, 다시 plan을 작성하는 것이 필요하다. 그래서 한 번에 planning을 하는 방식과 매 실행 후 다시 re-planning을 하는 방식이 존재한다.
+
+ ## **Search**란 무엇일까?
+  *Search*란 이런 planning agent를 구현하기 위한 기술로, 어떤 goal을 달성하게 해주는 *action*들의 *sequence*를 찾는 과정을 말한다. 
+
+   **Search problem**은 위 정의 그대로의 구조를 가지고 있다.
+   * *state space*(상태 공간) : start state에서 시작해 임의의 action들을 통해 도달할수 있는 모든 state들의 집합
+   * *Successor function*(with actions, costs) (후행자) : successor function은 agent의 가능한 action들에 대한 response로, world의 상태가 어떻게 변화하는지를 나타낸다.
+   * *Start state* and a *goal test* : 초기의 start state와 최종적으로 도달할 goal state가 필요하고, goal에 도달했는지 확인할 goal test가 존재한다.
+  
+  우린 search problem을 해결하여 start state를 goal state에 도달할 수 있게 해주는 sequence of action(plan), solution을 찾고자 한다.
+
+ 물론 Search problem을 위해 실제 real world를 그대로 simmulation할 수 있다면 좋겠지만, 너무 복잡하기 때문에 조금 더 rough하게 만든 model을 통해 search problem이 진행된다. 
+
+ 수업 예시로 소개된 팩맨 게임을 통해 이해해보자.
+
+ (사진 첨부)
+
+ 위 그림에 나타낸 팩맨 게임은 다음과 같은 world state를 가진다. (world state는 환경이 가진 모든 detail들을 포함한 것)
+  
+  * Agent position :120
+  * Food count : 30
+  * Ghost position : 12
+  * Agent facing : NSEW
+  (총 개수는 120 * 2^30 * 12^2 * 4)
+  
+ 하지만 목적에 따라 이런 world state 중 planning에 필요한 요소만 찾아 가지고 있는 것을 *Search State*라고 하며, 이런 과정을 Abstraction(추상화)라고 한다.
+
+ 1. Pathing problem
+ * state space : agent's (x,y) location (총 개수는 120)
+ * action : NSEW
+ * successor : update location
+ * goal test : is (x,y) = END
+
+ 2. Eat-all-Dots problem
+ * state space : {agent's (x,y) location and dot booleans} (총 개수는 120 * 2^30)
+ * action : NSEW
+ * successor : update location and dot boolean
+ * goal test : all dots false
+
+## State Space Graphs
+ 앞에서 배운 state space를 수학적 표현방식으로 나타낸 것이 바로 *State Space Graph*이다.
+ 
+ Graph의 각 node는 (abstracted) world configuration을 나타내고, action에 따라 successors인 arc를 따라 확장되며, 이때의 goal test는 goal node들의 set으로 이루어져 있다.
+
+ 특징은, 각 state가 오직 한 번씩만 나타나 중복이 발생하지 않는다는 것이다.
+
+ 다만 매우 그 크기가 커 전체 graph를 memory 상에 만드는 것은 어렵다.
+
+## Search Trees
+ *Search Tree*는 "what if" planning을 tree 구조로 표현한 것이다.
+
+  Start state가 root node로, successor에 따라 children이 만들어지며, 특정 state에 도달하기 까지의 경로가 곧 plan이자 solution으로 나타난다.
+
+  특징은, 중복이 발생학 때문에 tree가 무한히 확장될 수 있어 전체 tree를 memory 상에 올릴 수 없다.
+
+(사진 첨부)
+
+ graph 상에선 4가지 state만으로 표현이 가능하지만 tree에선 중복이 가능해 무한히 확장됨을 확인할 수 있다.
+
+## Searching with a Search Tree
+ 이 Search Tree를 기반으로 searching을 수행하면, 일반적으로 다음과 같은 형태의 알고리즘을 가진다.
+
+ (사진 첨부)
+
+여기서 중요한 요소는 fringe(candidate node라 이해하면 됨)를 어떻게 다루고, 어떻게 expansion이 진행되며, 그를 위한 exploration strategy가 무엇인가이다.
+ 
+ 예시로 Romania pathing problem에 적용해보자.
+
+ (사진 첨부)
+
+ 위 tree는 Arad에서 이미 Sibu를 확장한 상황이다. 이때, Arad와 Sibu에 연결되어 있는 node들이 바로 fringe에 해당된다. 이제 우린 fringe에서 어떤 strategy를 선택하는가에 따라 다음 node를 선택하고 확장하며 search를 진행하게 된다.
+
+ 널리 알려진 알고리즘으론 *Depth-First Search(DFS)*, *Breadth-First Search(BFS)*등이 있으며 이들은 완전히 다른 strategy를 가지고 있다. ( 이후에 소개 )
+
+ ## SEa
+
+-- 뭔가 DFS까진 했지만 여기서부턴 다음거에 이어 쓰는게 나을듯? --
+
