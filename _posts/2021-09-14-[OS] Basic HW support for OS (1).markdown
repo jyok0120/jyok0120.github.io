@@ -12,6 +12,7 @@ categories:
  　1주차에선 Operating system에 대해 제대로 배우기 전, 기본적으로 알아야 할 HW 지식들을 우선 배운다.
 <br><br>
  
+ 
  ## Bootstrapping OS kernel
  
  <br>
